@@ -1,27 +1,28 @@
+<details>
 <summary> Raspberry 기본설정 </summary>
 <div markdown="1"> 
 
-### Step1. 라즈베리파이 한글 설치
+### 라즈베리파이 한글 설치
 
-#### 1
+#### Step.1
 ```
 sudo apt-get install fonts-unfonts-core
 sudo apt-get install ibus ibus-hangul
 sudo reboot
 ```
-#### 2
+#### Step.2
 
 설정 -> 기본 설정 -> IBus 환경 설정 -> IBus 데몬 실행 
 
 
 
-### Step2. 라즈베리파이 아두이노 설치
+### 라즈베리파이 아두이노 설치
 
 ```
 sudo apt-get install arduino
 ```
 
-### Step3. 라즈베리파이 웹캠 설치
+### 라즈베리파이 웹캠 설치
 
 - 웹캠 설정
 ```
@@ -55,6 +56,8 @@ home/pi에서 해당 이미지 확인
 </div>
 </details>
 
+
+<details>
 <summary> MQTT 통신 </summary>
 <div markdown="1"> 
 
