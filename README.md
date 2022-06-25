@@ -1,6 +1,8 @@
 # Kobot
+
 Kobot11th
+
 - Raspberry
-    - Arduino
-    - MQTT
+  - Arduino
+  - MQTT
 - YOLO

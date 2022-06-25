@@ -434,6 +434,83 @@ Server.listen(3300, (err) => {
 });
 ```
 
+6. Nodejs Middleware 사용하기
+
+특정 데이터를 처리하기전 서버에서 공통적으로 처해야 할 작업
+클라이언트의 모든 요청은 미들웨어를 통과해야한다!
+
+<img width="475" alt="스크린샷 2022-06-25 오후 5 58 56" src="https://user-images.githubusercontent.com/79856225/175766255-b94e1bc9-8038-42b0-8d2a-7867145e1a00.png">
+
+1. 404.html 파일 생성
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Page Not Found 404</h1>
+  </body>
+</html>
+```
+
+2. CSS사용을 위해 public 폴더생성 -> index.css 파일생성
+
+```css
+.red {
+  color: red;
+}
+```
+
+3. 미들웨어를 사용해서 public 경로를 공통적으로 적용 app.js 수정
+
+```javascript
+const express = require("express");
+const Server = express();
+// GET , POST , DELETE, PUT
+
+Server, use(express.static(__dirname + "public"));
+
+Server.get("/", (req, res) => {
+  res.sendFile(__dirname + "/index.html");
+});
+
+Server.get("/about", (req, res) => {
+  res.sendFile(__dirname + "/about.html");
+});
+
+Server.use((req, res) => {
+  res.sendFile(__dirname + "404/html");
+});
+
+Server.listen(3300, (err) => {
+  if (err) return console.log(err);
+  console.log("The Server is Listening on Port 3300");
+});
+```
+
+4. index.html과 css 파일 연동
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/index.css" />
+    <title>Main</title>
+  </head>
+  <body>
+    <h1 class="red">This is MainPage</h1>
+  </body>
+</html>
+```
+
 <!-- <details>
 <summary>  </summary>
 <div markdown="1">
