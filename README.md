@@ -6,3 +6,4 @@ Kobot11th
   - Arduino
   - MQTT
 - YOLO
+- Deeplearning
