@@ -129,5 +129,76 @@ while True:
     if cv2.waitKey(1) & 0xFF == 27:
         break ### ESC
 ```
+### 3. Deep Sort 알고리즘
+
+위 두개의 알고리즘 보다 더 좋아 보임
+
+## DeepSORT : 기존 SORT Tracker의 (Detection + Kalman Filter + Hungarian Algorithm) 구조에서 '딥러닝'을 복합한 구조로, Appearance를 이용한 거리 측정 등을 통해 기존 SORT보다 더 뛰어난 성능을 보여주는 추적기이다.
+
+- Kalman filter(칼만 필터)
+
+쉽게 말해 이전 프레임에 등장한 개체를 이용하여 다음 움직임을 예측하는 것이다.
+
+- Hungarian algorithm
+
+Deep sort가 이전등장한 객체와 예측한 객체가 동일하다라고 판별하는 기준
+
+### 설명을 봐도 어렵다 일단 구현해보자..
+
+유투버 The AI Guy의 영상과 Github을 참고하혔음
+
+[참고링크](https://www.youtube.com/watch?v=FuvQ8Melz1o)
+
+## 선수 지식
+- YOLOv4 
+- Tensorflow
+
+
+프로젝트를 시작할 폴더에서 Git clone
+```
+git clone https://github.com/theAIGuysCode/yolov4-deepsort.git
+```
+
+
+
+1. YOLOv4 가중치파일과 cfg파일을 다운로드  
+[Github 주소]https://github.com/AlexeyAB/darknet
+- [yolo4.weight](https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights)
+- [yolo4.cfg](https://raw.githubusercontent.com/AlexeyAB/darknet/master/cfg/yolov4.cfg)
+
+위 두 파일을 다운로드 해준다.   
+##### # 나는 IOT 사용을 위해 tiny모델을 다운로드함
+
+2. 가상환경 설치 및 필요 라이브러리 설치
+
+```python
+# Tensorflow CPU
+conda env create -f conda-cpu.yml
+conda activate yolov4-cpu
+
+# Tensorflow GPU
+conda env create -f conda-gpu.yml
+conda activate yolov4-gpu
+#  =============== 가상환경설치 ============== 
+# TensorFlow CPU
+pip install -r requirements.txt
+
+# TensorFlow GPU
+pip install -r requirements-gpu.txt
+
+#  =============== 라이브러리 설치 ============== 
+```
+
+3. Yolo 모델을 Tensorflow 모델로 변환
+
+#### 변환하는 이유 
+- 자유롭게 커스텀이 가능
+- tensorflow lite를 이용하여 모바일 개발이 가능
+    - YOLO를 라즈베리파이에서 사용함에 있어서 많은 제약이 있다 IOT사용을 위해 모델을 가볍게 만드는과정이 필수
+
+```
+python save_model.py --model yolov4 
+```
+위 명령어로 쉽게 YOLO모델을 tensorflow모델로 변환이 가능하다.
 
 
