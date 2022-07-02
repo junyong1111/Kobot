@@ -6,7 +6,7 @@ import time # -- 프레임 계산을 위해 사용
 vedio_path = './video.mp4' #-- 사용할 영상 경로
 min_confidence = 0.5
 
-def detectAndDisplay(frame):
+def detectAndDisplay(frame): 
     detect_time = time.time()
     img = cv2.resize(frame, None, fx=0.8, fy=0.8)
     height, width, channels = img.shape
