@@ -152,9 +152,13 @@ Deep sort가 이전등장한 객체와 예측한 객체가 동일하다라고 �
 ## 선수 지식
 - YOLOv4 
 - Tensorflow
+- Google Colab  
+
+##### <u> 가상환경 및 GPU 설정이 어렵다면 COLAB 사용을 추천</u>
 
 
-프로젝트를 시작할 폴더에서 Git clone
+### Colab -> 런타임 변경 -> GPU 설정
+Coalb 또는 프로젝트를 시작할 폴더에서 Git clone
 ```
 git clone https://github.com/theAIGuysCode/yolov4-deepsort.git
 ```
@@ -170,6 +174,18 @@ git clone https://github.com/theAIGuysCode/yolov4-deepsort.git
 ##### # 나는 IOT 사용을 위해 tiny모델을 다운로드함
 
 2. 가상환경 설치 및 필요 라이브러리 설치
+
+### <mark>Tensorflow 버전은 2.3.0이어야 한다</mark>
+<u>만약 아닌경우 해당 코드 실행</u>
+```python
+#### 이 코드를 추가하지않으면 실행 불가
+!pip uninstall tensorflow -y
+!pip install tensorflow==2.3.0
+import tensorflow
+tensorflow.__version__
+```
+
+가상환경 및 라이브러리 설치
 
 ```python
 # Tensorflow CPU
@@ -202,3 +218,47 @@ python save_model.py --model yolov4
 위 명령어로 쉽게 YOLO모델을 tensorflow모델로 변환이 가능하다.
 
 
+
+4. 객체 추적하기
+
+변환된 모델을 이용하여 객체 추적
+
+```python
+# 저장된 비디오에서 yolo4 deep sort 객체 추적
+python object_tracker.py --video ./data/video/test.mp4 --output ./outputs/demo.avi --model yolov4
+
+# 노트북 webcam에서  yolo4 deep sort 객체 추적 (video 0으로 설정)
+python object_tracker.py --video 0 --output ./outputs/webcam.avi --model yolov4
+```
+
+<mark>tiny 모델 사용법  </mark>
+
+```python
+# save yolov4-tiny model
+python save_model.py --weights ./data/yolov4-tiny.weights --output ./checkpoints/yolov4-tiny-416 --model yolov4 --tiny
+
+# Run yolov4-tiny object tracker
+python object_tracker.py --weights ./checkpoints/yolov4-tiny-416 --model yolov4 --video ./data/video/test.mp4 --output ./outputs/tiny.avi --tiny
+```
+
+5. 원하는 클래스만 추적하게 코드 수정
+
+object_tracker.py 파일 수정  
+159번째 줄 코드 수정
+```python
+# 원하는 클래스만을 넣어주면 해당 객체만 트랙킹한다. class정보는 coco.names 또는 자신이 학습한 names파일을 참고한다.
+        allowed_classes = list(class_names.values())
+        #ex
+        # allowed_classes = ['person']
+```
+
+
+
+
+
+<!-- <details>
+<summary>  </summary>
+<div markdown="1">
+
+</div>
+</details>  -->
