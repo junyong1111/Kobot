@@ -62,8 +62,8 @@ def detectAndDisplay(frame):
     cv2.imshow("YOLO test", img)
     
 #-- yolo 포맷 및 클래스명 불러오기
-model_file = 'yolov4.weights' #-- 본인 개발 환경에 맞게 변경할 것
-config_file = 'yolov4.cfg' #-- 본인 개발 환경에 맞게 변경할 것
+model_file = 'YOLO/Yolov4/yolov4-tiny.weights' #-- 본인 개발 환경에 맞게 변경할 것
+config_file = 'YOLO/Yolov4/Yolov4_tiny.cfg' #-- 본인 개발 환경에 맞게 변경할 것
 net = cv2.dnn.readNet(model_file, config_file)
 
 #-- GPU 사용
@@ -72,10 +72,11 @@ net = cv2.dnn.readNet(model_file, config_file)
 
 #-- 클래스(names파일) 오픈 / 본인 개발 환경에 맞게 변경할 것
 classes = []
-with open("coco.names", "r") as f:
+with open("YOLO/IOT/coco.names", "r") as f:
     classes = [line.strip() for line in f.readlines()]
 layer_names = net.getLayerNames()
-output_layers = ['yolo_139', 'yolo_150', 'yolo_161']
+output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+
 colors = np.random.uniform(0, 255, size=(len(classes), 3))
 
 #-- 비디오 활성화
