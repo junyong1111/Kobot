@@ -76,6 +76,7 @@ with open("YOLO/IOT/coco.names", "r") as f:
     classes = [line.strip() for line in f.readlines()]
 layer_names = net.getLayerNames()
 output_layers = [layer_names[i - 1] for i in net.getUnconnectedOutLayers()]
+## 기존 코드 i[0] - 1 을 수정해야함
 
 colors = np.random.uniform(0, 255, size=(len(classes), 3))
 

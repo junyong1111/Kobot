@@ -2,16 +2,28 @@ import cv2
 import face_recognition
 import pickle
 import time
+import os
+import tensorflow as tf
+
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+gpus = tf.config.experimental.list_physical_devices('GPU')
+if gpus:
+    try:
+        tf.config.experimental.set_memory_growth(gpus[0], True)
+    except RuntimeError as e:
+        print(e)
+
 
 file_name = ('Olivia.mp4')
 encoding_file = 'encodings.pickle'
 Unknow_name = 'Unknown'
 
-model_method = 'cnn'
+model_method = 'HOG'
 
 
 def detectAndDisplay(image):
-    image = cv2.resize(image, (416,416), interpolation= cv2.INTER_LINEAR)
+    start_time = time.time()
+    image = cv2.resize(image, (256,256), interpolation= cv2.INTER_LINEAR)
     rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     boxes = face_recognition.face_locations(rgb, 
                                             model = model_method)
@@ -52,13 +64,16 @@ def detectAndDisplay(image):
         cv2.putText(image, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX, 
                     0.75, color, line)
         
-    image = cv2.resize(image, None, fx= 0.5, fy=0.5)
+    
+    end_time = time.time()
+    print(end_time- start_time)
+    image = cv2.resize(image, None, fx= 2, fy=2)
     cv2.imshow("FACE", image)  
 
 
 
 data = pickle.loads(open(encoding_file, "rb").read())
-cap = cv2.VideoCapture(file_name)
+cap = cv2.VideoCapture(0)
 
 if not cap.isOpened:
     print('EEEEEE')
