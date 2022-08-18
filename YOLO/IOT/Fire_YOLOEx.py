@@ -1,3 +1,32 @@
+#-*- coding:utf-8 -*-
+
+import collections
+from distutils.command.config import config
+import pyrebase
+import json
+from datetime import datetime
+
+config = {
+    "apiKey": "AIzaSyBqQjlNppEdPpjZrA64zEgkKfAIIPo-TE8",
+    "authDomain": "ossvideo-5e684.firebaseapp.com",
+    "databaseURL":"https://ossvideo-5e684-default-rtdb.firebaseio.com/",
+    "projectId": "ossvideo-5e684",
+    "storageBucket": "ossvideo-5e684.appspot.com",
+    "messagingSenderId": "798635139551",
+    "appId": "1:798635139551:web:b76ed3012d82202bb2646a",
+    "measurementId": "G-JFF15R9GQ8",
+    "serviceAccount": "YOLO/IOT/serviceAcc.json"
+}
+
+
+## firebase sotrage 실행 ###
+firebase = pyrebase.initialize_app(config)
+storage = firebase.storage()
+## firebase sotrage 실행 ###
+
+
+
+
 import cv2
 import numpy as np
 import time # -- 프레임 계산을 위해 사용
@@ -108,6 +137,11 @@ while True:
     Time  = int(End_Time - Start_Time)
     
     if Time == 10:
+        #####   데이터 업로드 #####
+        ## 첫 번째는 데이터베이스에 보여지길 원하는 이름을 적고 그 다음에는 업로드할 파일의 경로를 적어준다.
+        name = "Person" + str(datetime.now())
+        storage.child(name).put(r"output.avi")
+        #####   데이터 업로드 #####
         print("SAVE THE VIDEO ")
         Time = 0
         break
