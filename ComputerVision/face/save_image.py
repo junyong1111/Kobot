@@ -1,3 +1,4 @@
+from ast import pattern
 import cv2
 import os
 import time
@@ -6,7 +7,10 @@ import time
 cap = cv2.VideoCapture(0) ## 웹캠
 ## 동영상 경로
 
-Name = str(input("Input Your Name\n"))
+pattern = ".mp4"
+Name = "User1.mp4"
+Name = Name.replace(pattern, "")
+
 with open ("Names", "a") as txt:
     txt.write(Name + "\n")
 ## 사용자 등록
@@ -31,7 +35,6 @@ while cap.isOpened():
         break
     # if(int(cap.get(1)) % 40 == 0):
     ## 20프레임마다 저장  
-    
     
     print('Saved frame number :' + str(int(cap.get(1))))
     cv2.imwrite("Image/"+Name+"/" + Name+ "%d.jpg" % count, frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
