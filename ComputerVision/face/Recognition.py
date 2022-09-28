@@ -4,6 +4,7 @@ import pickle
 import time
 import os
 import tensorflow as tf
+import numpy as np
 
 os.environ["CUDA_VISIBLE_DEVICES"]="0"
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -14,20 +15,21 @@ if gpus:
         print(e)
 
 
-file_name = ('Olivia.mp4')
+file_name = 'User1.mp4'
 encoding_file = 'encodings.pickle'
 Unknow_name = 'Unknown'
+frame_resizing = 0.25
+model_method = 'CNN'
 
-model_method = 'HOG'
 
 
 def detectAndDisplay(image):
     start_time = time.time()
-    image = cv2.resize(image, (256,256), interpolation= cv2.INTER_LINEAR)
-    rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    boxes = face_recognition.face_locations(rgb, 
-                                            model = model_method)
-    encodings = face_recognition.face_encodings(rgb, boxes)
+    small_frame = cv2.resize(frame, (0, 0), fx=frame_resizing, fy=frame_resizing)
+    # small_frame = cv2.resize(image, (256,256), interpolation= cv2.INTER_LINEAR)
+    rgb_small_frame = cv2.cvtColor(small_frame, cv2.COLOR_BGR2RGB)
+    boxes = face_recognition.face_locations(rgb_small_frame,model=model_method)
+    encodings = face_recognition.face_encodings(rgb_small_frame, boxes)
     
     names = []
     
@@ -37,37 +39,31 @@ def detectAndDisplay(image):
         name = Unknow_name
         
         if True in matches:
-            
             matchesIdxs = [i for (i,b) in enumerate(matches) if b]
             counts = {}
             
             for i in matchesIdxs:
                 name = data["names"][i]
+                print(name)
                 counts[name] = counts.get(name,0) +1
                 
                 
             name = max(counts, key = counts.get)
         names.append(name)
+        boxes = np.array(boxes)
+        boxes = boxes / frame_resizing
+        boxes = boxes.astype(int)
         
-    for ((top, right, bottom, left), name) in zip(boxes, names):
+    for face_loc, name in zip(boxes, names):
         
-        y = top -15 if top -15 >15 else top+15
-        color = (0,255,0)
-        line = 2
-        if(name == Unknow_name):
-            color = (0,0,255)
-            line = 1
-            name = ''
+        top, left, bottom, right = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
+        cv2.putText(image, name, (left, top - 1), cv2.FONT_HERSHEY_DUPLEX, 1, (0, 255, 0), 2)
+        cv2.rectangle(image, (left,top), (right, bottom), (0, 0, 200), 4)
         
-        cv2.rectangle(image, (left, top), (right, bottom), color, line)
-        y = top -15 if top -15 >15 else top+15
-        cv2.putText(image, name, (left, y), cv2.FONT_HERSHEY_SIMPLEX, 
-                    0.75, color, line)
-        
-    
     end_time = time.time()
     print(end_time- start_time)
-    image = cv2.resize(image, None, fx= 2, fy=2)
+    
+    # image = cv2.resize(frame, (0, 0), fx=frame_resizing, fy=frame_resizing)
     cv2.imshow("FACE", image)  
 
 
